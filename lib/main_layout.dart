@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/detail_page.dart';
+// import 'package:my_app/pages/detail_page.dart';
 import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/pages/menu_page.dart';
 // import 'package:my_app/pages/login_page.dart';
 
 class MainLayout extends StatefulWidget {
@@ -14,9 +15,10 @@ class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
+    const MenuPage(),
     const HomePage(),
     // const LoginPage(),
-    const DetailPage(),
+    // const DetailPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -58,8 +60,8 @@ class _MainLayoutState extends State<MainLayout> {
           selectedFontSize: 12,
           unselectedFontSize: 12,
           items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Menu'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
-            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Chi tiết'),
           ],
         ),
       ),
