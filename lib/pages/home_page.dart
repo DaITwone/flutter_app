@@ -162,7 +162,7 @@ Widget buildGreetingHeader() {
             size: 26,
           ),
           onPressed: () {
-            // TODO: thêm hành động thông báo sau
+           //
           },
         ),
       ],

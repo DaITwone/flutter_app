@@ -46,6 +46,7 @@ class _MainLayoutState extends State<MainLayout> {
       ),
 
       body: _pages[_selectedIndex], // chỉ thay đổi phần này
+      
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(bottom: 8, top: 6), // canh giữa Y
         color: const Color(0xFF023D50),

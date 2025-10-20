@@ -1,103 +1,59 @@
+// ignore_for_file: use_super_parameters
 import 'package:flutter/material.dart';
-
-const primaryColor = Color(0xFF023D50);
-// ================= HOME PAGE =================
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  final String title;
+  final String imageUrl;
+  final int price;
+
+  const DetailPage({
+    Key? key,
+    required this.title,
+    required this.imageUrl,
+    required this.price,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: const [
-          ProductCard(
-            image:
-            'https://images.unsplash.com/photo-1717398804998-ad2d48822518?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1hdGNoYSUyMGxhdHRlfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600',
-            name: 'Matcha Latte',
-            price: '45.000đ',
-          ),
-          ProductCard(
-            image:
-            'https://plus.unsplash.com/premium_photo-1677607237294-b041e4b57391?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGNvZmZlZSUyMG1pbGt8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600',
-            name: 'Milk Coffee',
-            price: '55.000đ',
-          ),
-          ProductCard(
-            image:
-            'https://images.unsplash.com/photo-1501199532894-9449c0a85a77?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8dHIlQzMlQTAlMjB0ciVDMyVBMWklMjBjJUMzJUEyeXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600',
-            name: 'Cóc Cóc Đác Đác',
-            price: '60.000đ',
-          ),
-        ],
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: const Color(0xFF003459),
       ),
-    );
-  }
-}
-
-// ================= PRODUCT CARD =================
-class ProductCard extends StatelessWidget {
-  final String image;
-  final String name;
-  final String price;
-  const ProductCard({
-    super.key,
-    required this.image,
-    required this.name,
-    required this.price
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            // ignore: deprecated_member_use
-            color: Colors.brown.withOpacity(0.2),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius:
-            const BorderRadius.horizontal(left: Radius.circular(12)),
-            child: Image.network(
-              image,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(imageUrl, height: 250, fit: BoxFit.cover),
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600)),
-                const SizedBox(height: 4),
-                Text(price,
-                    style: const TextStyle(
-                        color: Colors.brown, fontWeight: FontWeight.bold)),
-              ],
+            const SizedBox(height: 20),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.add_shopping_cart),
-            color: Colors.brown,
-            onPressed: () {},
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              '${price.toStringAsFixed(0)}đ',
+              style: const TextStyle(
+                color: Colors.redAccent,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Mô tả sản phẩm sẽ hiển thị ở đây...',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }

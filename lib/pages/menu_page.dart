@@ -1,5 +1,7 @@
+// ignore_for_file: use_super_parameters
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/pages/detail_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -32,44 +34,71 @@ class _MenuPageState extends State<MenuPage> {
 
   // Dữ liệu sản phẩm cho từng category
   final Map<int, List<Map<String, dynamic>>> categoryProducts = {
-    0: [ // Ưu đãi
+    0: [
+      // Ưu đãi
       {
         'title': 'COMBO NĂNG LƯỢNG',
         'price': 75000,
         'oldPrice': 99000,
         'discount': '-24%',
-        'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC-T51BJzl50EMbE9jUkw6aVhJFe5h52t7Dg&s',
+        'imageUrl':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC-T51BJzl50EMbE9jUkw6aVhJFe5h52t7Dg&s',
       },
       {
         'title': 'COMBO LẤP LÁNH',
         'price': 159000,
         'oldPrice': 228000,
         'discount': '-30%',
-        'imageUrl': 'https://chus.vn/images/Blog/Tea%20of%20coffee/Coffee-or-Tea-For-Seniors-min.jpg?1712138278025',
+        'imageUrl':
+            'https://chus.vn/images/Blog/Tea%20of%20coffee/Coffee-or-Tea-For-Seniors-min.jpg?1712138278025',
       },
     ],
-    1: [ // Tea
+    1: [
+      // Tea
       {
         'title': 'Trà Đào',
         'price': 45000,
-        'imageUrl': 'https://hocphachehanoi.com.vn/upload/userfiles/images/cach-lam-tra-dao-02.jpg',
+        'imageUrl':
+            'https://hocphachehanoi.com.vn/upload/userfiles/images/cach-lam-tra-dao-02.jpg',
       },
       {
         'title': 'Trà Vải',
         'price': 45000,
-        'imageUrl': 'https://bizweb.dktcdn.net/100/421/036/files/tra-cam-sa-vai.jpg?v=1639043038068',
+        'imageUrl':
+            'https://bizweb.dktcdn.net/100/421/036/files/tra-cam-sa-vai.jpg?v=1639043038068',
       },
       {
-        'title': 'Trá Sen Vàng',
+        'title': 'Trà Sen Vàng',
         'price': 50000,
-        'imageUrl': 'https://bepchethai.vn/wp-content/uploads/2023/02/tra-sen-vang-machiato-3-500x500.jpg',
+        'imageUrl':
+            'https://bepchethai.vn/wp-content/uploads/2023/02/tra-sen-vang-machiato-3-500x500.jpg',
+      },
+      {
+        'title': 'Trà Dâu',
+        'price': 50000,
+        'imageUrl':
+            'https://amivietnam.com/wp-content/uploads/2024/03/image-47.png',
+      },
+      {
+        'title': 'Trà Trái Cây Nhiệt Đới',
+        'price': 50000,
+        'imageUrl':
+            'https://cdn.sobanhang.com/v2/2000x2000/finan-prd/81d39d68-5ff6-4692-b918-a372b6bf6ab4/image/e416d0ab-993c-4efe-9dca-9a7b9e7372de.jpeg',
+      },
+      {
+        'title': 'Trà Ổi Hồng',
+        'price': 50000,
+        'imageUrl':
+            'https://cdn.tgdd.vn/2021/06/CookProductThumb/toh2-620x620.jpg',
       },
     ],
-    2: [ // Coffee
+    2: [
+      // Coffee
       {
         'title': 'Cà Phê Sữa Đá',
         'price': 35000,
-        'imageUrl': 'https://www.huongnghiepaau.com/wp-content/uploads/2024/07/cong-thuc-lam-ca-phe-sua-tuoi.jpg',
+        'imageUrl':
+            'https://www.huongnghiepaau.com/wp-content/uploads/2024/07/cong-thuc-lam-ca-phe-sua-tuoi.jpg',
       },
       {
         'title': 'Bạc Xỉu',
@@ -79,14 +108,35 @@ class _MenuPageState extends State<MenuPage> {
       {
         'title': 'Cà Phê Đen Đá',
         'price': 32000,
-        'imageUrl': 'https://banhmibahuynh.vn/wp-content/uploads/2025/06/Ca-phe-den-da-Madam-Win.jpg',
+        'imageUrl':
+            'https://banhmibahuynh.vn/wp-content/uploads/2025/06/Ca-phe-den-da-Madam-Win.jpg',
+      },
+      {
+        'title': 'Capuchino',
+        'price': 45000,
+        'imageUrl':
+            'https://cdn1.123job.vn/123job/uploads/2021/09/27/2021_09_27______7c79422cc3229dbda950a5b5db38c2f6.jpg',
+      },
+      {
+        'title': 'Cà Phê Trứng',
+        'price': 45000,
+        'imageUrl':
+            'https://traphucsang.vn/wp-content/uploads/2025/08/cach-pha-ca-phe-trung-ngon-nhat.jpg',
+      },
+      {
+        'title': 'Cà Phê Muối',
+        'price': 45000,
+        'imageUrl':
+            'https://viettuantea.vn/wp-content/uploads/2023/09/cach-lam-ca-phe-muoi-1024x1024.jpg',
       },
     ],
-    3: [ // Matcha
+    3: [
+      // Matcha
       {
         'title': 'Matcha Latte',
         'price': 55000,
-        'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrJrTp_PHyT7ifNbQ-DtZU6MQQ2mFe6mcnZg&s',
+        'imageUrl':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrJrTp_PHyT7ifNbQ-DtZU6MQQ2mFe6mcnZg&s',
       },
       {
         'title': 'Matcha Đá Xay',
@@ -96,58 +146,130 @@ class _MenuPageState extends State<MenuPage> {
       {
         'title': 'Matcha Macchiato',
         'price': 58000,
-        'imageUrl': 'https://uories.com/wp-content/uploads/2020/03/MatchaMacchiato_www.uories.com_2.jpg',
+        'imageUrl':
+            'https://uories.com/wp-content/uploads/2020/03/MatchaMacchiato_www.uories.com_2.jpg',
+      },
+      {
+        'title': 'Matcha Đậu đỏ',
+        'price': 58000,
+        'imageUrl':
+            'https://horecavn.com/wp-content/uploads/2024/05/tra-sua-matcha-dau-do_20240527105057.jpg',
+      },
+      {
+        'title': 'Matcha Dâu Latte',
+        'price': 58000,
+        'imageUrl':
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSED-nzJRiHzcsJ9y6UUhlr0Etp8su7LENeDw&s',
       },
     ],
-    4: [ // Milk Tea
+    4: [
+      // Milk Tea
       {
         'title': 'Trà Sữa Trân Châu',
         'price': 48000,
-        'imageUrl': 'https://dayphache.edu.vn/wp-content/uploads/2020/02/mon-tra-sua-tran-chau.jpg',
+        'imageUrl':
+            'https://dayphache.edu.vn/wp-content/uploads/2020/02/mon-tra-sua-tran-chau.jpg',
       },
       {
         'title': 'Trà Sữa Ô Long',
         'price': 52000,
-        'imageUrl': 'https://static.wixstatic.com/media/57d3ad_eb3fc685e016483bbf860c01f0fdb13f~mv2.png/v1/fill/w_568,h_444,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/57d3ad_eb3fc685e016483bbf860c01f0fdb13f~mv2.png',
+        'imageUrl':
+            'https://static.wixstatic.com/media/57d3ad_eb3fc685e016483bbf860c01f0fdb13f~mv2.png/v1/fill/w_568,h_444,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/57d3ad_eb3fc685e016483bbf860c01f0fdb13f~mv2.png',
       },
       {
         'title': 'Trà Sữa Matcha',
         'price': 55000,
-        'imageUrl': 'https://file.hstatic.net/200000538679/article/cach-lam-tra-sua-matcha-chuan-vi-thom-ngon-tai-nha5_44906aa466224a9480f09cdc28f19e44.jpg',
+        'imageUrl':
+            'https://file.hstatic.net/200000538679/article/cach-lam-tra-sua-matcha-chuan-vi-thom-ngon-tai-nha5_44906aa466224a9480f09cdc28f19e44.jpg',
+      },
+      {
+        'title': 'Trà Sữa Thái xanh',
+        'price': 40000,
+        'imageUrl':
+            'https://i-giadinh.vnecdn.net/2021/09/11/Trasua1-1631341310-9389-1631341336.jpg',
+      },
+      {
+        'title': 'Sữa tươi trân châu đường đen',
+        'price': 48000,
+        'imageUrl':
+            'https://blog.dktcdn.net/files/sua-tuoi-tran-chau-duong-den-001.png',
       },
     ],
-    5: [ // Bánh
+    5: [
+      // Bánh
       {
         'title': 'Bánh Mì Que',
         'price': 15000,
-        'imageUrl': 'https://product.hstatic.net/200000688689/product/banh-mi-que_632028_400x400.jpg',
+        'imageUrl':
+            'https://tvpfood.com/wp-content/uploads/2024/10/banh-mi-que-minh-hoa-1-1.png',
       },
       {
         'title': 'Bánh Croissant',
         'price': 28000,
-        'imageUrl': 'https://product.hstatic.net/1000075078/product/croissant_f96e24c4a93a42e6b306ed2e4ea4c57b_grande.jpg',
+        'imageUrl': 'https://winci.com.vn/wp-content/uploads/2024/02/h-7.png',
       },
       {
         'title': 'Bánh Tiramisu',
         'price': 38000,
-        'imageUrl': 'https://bizweb.dktcdn.net/100/336/794/products/banh-tiramisu.jpg?v=1614587488490',
+        'imageUrl':
+            'https://daotaobeptruong.vn/wp-content/uploads/2020/11/banh-tiramisu.jpg',
+      },
+      {
+        'title': 'Bánh Tiramisu Matcha',
+        'price': 38000,
+        'imageUrl':
+            'https://cdn.tgdd.vn/2021/03/CookProduct/1200-1200x676-97.jpg',
+      },
+      {
+        'title': 'Panna Cotta',
+        'price': 40000,
+        'imageUrl':
+            'https://file.hstatic.net/200000692767/file/cach-lam-panna-cotta__3_.png',
+      },
+      {
+        'title': 'Panna Cotta Coffee',
+        'price': 44000,
+        'imageUrl':
+            'https://media.vneconomy.vn/images/upload/2021/04/21/ca-phe-15350831171861391119733.jpg?w=600',
       },
     ],
-    6: [ // Topping
+    6: [
+      // Topping
       {
         'title': 'Trân Châu Đen',
-        'price': 10000,
-        'imageUrl': 'https://product.hstatic.net/200000688689/product/tran-chau-den_513417_400x400.jpg',
+        'price': 8000,
+        'imageUrl':
+            'https://chapatea.vn/wp-content/uploads/2025/01/tran-chau-den-8734.jpeg',
       },
       {
         'title': 'Trân Châu Trắng',
         'price': 10000,
-        'imageUrl': 'https://product.hstatic.net/1000075078/product/tran-chau-trang_grande.jpg',
+        'imageUrl':
+            'https://alltop.vn/backend/media/images/posts/695/Tran_Chau_Trang_3Q_Ezmix-128334.jpg',
       },
       {
         'title': 'Thạch Phô Mai',
         'price': 12000,
-        'imageUrl': 'https://product.hstatic.net/200000688689/product/thach-pho-mai_461810_400x400.jpg',
+        'imageUrl':
+            'https://storage.googleapis.com/onelife-public/blog.onelife.vn/2021/10/cach-lam-thach-rau-cau-ca-phe-pho-mai-mon-trang-mieng-780259497769.jpg',
+      },
+      {
+        'title': 'Bánh Plan',
+        'price': 10000,
+        'imageUrl':
+            'https://savourebakery.com/storage/images/san-pham/Banh-lanh/Banh-Flan-2.jpg',
+      },
+      {
+        'title': 'Kem Cheese',
+        'price': 12000,
+        'imageUrl':
+            'https://bizweb.dktcdn.net/100/439/247/products/5b9b880f-fb55-438f-9c89-adc684dc51bd.png?v=1656341171563',
+      },
+      {
+        'title': 'Thạch dừa',
+        'price': 9000,
+        'imageUrl':
+            'https://goce.vn/files/common/thach-dua-huong-vai-5btgg.png',
       },
     ],
   };
@@ -175,7 +297,9 @@ class _MenuPageState extends State<MenuPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              sidebarItems[selectedCategory]['label'].toString().toUpperCase(),
+                              sidebarItems[selectedCategory]['label']
+                                  .toString()
+                                  .toUpperCase(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -200,7 +324,7 @@ class _MenuPageState extends State<MenuPage> {
 
   Widget _buildProductList() {
     final products = categoryProducts[selectedCategory] ?? [];
-    
+
     if (products.isEmpty) {
       return Center(
         child: Padding(
@@ -208,10 +332,7 @@ class _MenuPageState extends State<MenuPage> {
           child: Text(
             'Đang cập nhật...',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
           ),
         ),
       );
@@ -264,68 +385,81 @@ class _MenuPageState extends State<MenuPage> {
     required int price,
     required String imageUrl,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DetailPage(title: title, imageUrl: imageUrl, price: price),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Image.network(
-                imageUrl,
-                width: double.infinity,
-                fit: BoxFit.cover,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+                child: Image.network(
+                  imageUrl,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${price.toStringAsFixed(0)}đ',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${price.toStringAsFixed(0)}đ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.add_circle_outline,
-                      color: Color(0xFF003459),
-                      size: 24,
-                    ),
-                  ],
-                ),
-              ],
+                      const Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xFF003459),
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -473,7 +607,9 @@ class _MenuPageState extends State<MenuPage> {
                   Text(
                     tabs[index],
                     style: TextStyle(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                       color: isSelected ? Colors.black : Colors.grey[600],
                     ),
                   ),
@@ -529,7 +665,10 @@ class _MenuPageState extends State<MenuPage> {
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.brown[300],
                     borderRadius: BorderRadius.circular(6),
@@ -571,9 +710,11 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
+  // Container - bao bọc, trang trí, định kích thước và bố trí con của nó.
   Widget _buildCartButton() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      // Trang trí
       decoration: BoxDecoration(
         color: const Color(0xFF003459),
         borderRadius: BorderRadius.circular(30),
