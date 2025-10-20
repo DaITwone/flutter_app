@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/main_layout.dart';
+// import 'package:my_app/main_layout.dart';
+import 'package:my_app/pages/detail_page.dart';
+// import 'package:my_app/pages/menu_page.dart';
+
 // import 'package:my_app/pages/home_page.dart';
 // import 'package:my_app/pages/login_page.dart';
 const primaryColor = Color(0xFF023D50);
@@ -33,7 +37,12 @@ class MyApp extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.blueGrey), // màu chữ gợi ý
         ),
       ),
-      home: const MainLayout(),
+      // home: const MainLayout(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MainLayout(),
+        '/detail': (context) => const DetailPage(),
+      },
     );
   }
 }

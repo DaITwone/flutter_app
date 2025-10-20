@@ -1,7 +1,8 @@
 // ================= LOGIN PAGE =================
 
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/home_page.dart';
+import 'package:my_app/main_layout.dart';
+// import 'package:my_app/pages/home_page.dart';
 
 const primaryColor = Color(0xFF023D50);
 
@@ -179,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) => const MainLayout(),
                         ),
                       );
                     },

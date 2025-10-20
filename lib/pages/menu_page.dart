@@ -1,7 +1,7 @@
 // ignore_for_file: use_super_parameters
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:my_app/pages/detail_page.dart';
+// import 'package:my_app/pages/detail_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -34,8 +34,8 @@ class _MenuPageState extends State<MenuPage> {
 
   // Dữ liệu sản phẩm cho từng category
   final Map<int, List<Map<String, dynamic>>> categoryProducts = {
-    0: [
       // Ưu đãi
+    0: [
       {
         'title': 'COMBO NĂNG LƯỢNG',
         'price': 75000,
@@ -53,8 +53,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://chus.vn/images/Blog/Tea%20of%20coffee/Coffee-or-Tea-For-Seniors-min.jpg?1712138278025',
       },
     ],
-    1: [
       // Tea
+    1: [
       {
         'title': 'Trà Đào',
         'price': 45000,
@@ -92,8 +92,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://cdn.tgdd.vn/2021/06/CookProductThumb/toh2-620x620.jpg',
       },
     ],
-    2: [
       // Coffee
+    2: [
       {
         'title': 'Cà Phê Sữa Đá',
         'price': 35000,
@@ -130,8 +130,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://viettuantea.vn/wp-content/uploads/2023/09/cach-lam-ca-phe-muoi-1024x1024.jpg',
       },
     ],
-    3: [
       // Matcha
+    3: [
       {
         'title': 'Matcha Latte',
         'price': 55000,
@@ -162,8 +162,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSED-nzJRiHzcsJ9y6UUhlr0Etp8su7LENeDw&s',
       },
     ],
-    4: [
       // Milk Tea
+    4: [
       {
         'title': 'Trà Sữa Trân Châu',
         'price': 48000,
@@ -195,8 +195,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://blog.dktcdn.net/files/sua-tuoi-tran-chau-duong-den-001.png',
       },
     ],
-    5: [
       // Bánh
+    5: [
       {
         'title': 'Bánh Mì Que',
         'price': 15000,
@@ -233,8 +233,8 @@ class _MenuPageState extends State<MenuPage> {
             'https://media.vneconomy.vn/images/upload/2021/04/21/ca-phe-15350831171861391119733.jpg?w=600',
       },
     ],
-    6: [
       // Topping
+    6: [
       {
         'title': 'Trân Châu Đen',
         'price': 8000,
@@ -387,14 +387,13 @@ class _MenuPageState extends State<MenuPage> {
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) =>
-                DetailPage(title: title, imageUrl: imageUrl, price: price),
-          ),
+          '/detail',
+          arguments: {'title': title, 'imageUrl': imageUrl, 'price': price},
         );
       },
+
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
