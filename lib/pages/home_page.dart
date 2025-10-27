@@ -1,6 +1,9 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // cần thêm thư viện này
 import 'package:my_app/pages/login_page.dart';
+import '../data/menu_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,50 +57,100 @@ class _HomePageState extends State<HomePage> {
           ),
 
           const SizedBox(height: 16),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 200.0,
-              autoPlay: true, // tự động chuyển
-              enlargeCenterPage: true, // ảnh giữa phóng to nhẹ
-              autoPlayInterval: const Duration(seconds: 3),
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-            ),
-            items: bannerImages.map((imageUrl) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+          // Banner trong Stack để chấm nằm trên ảnh
+          Stack(
+            alignment:
+                Alignment.bottomCenter, // căn dấu chấm ở dưới cùng của ảnh
+            children: [
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 200.0,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
                 ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 8),
+                items: bannerImages.map((imageUrl) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  );
+                }).toList(),
+              ),
 
-          // Dấu chấm thể hiện vị trí banner
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: bannerImages.asMap().entries.map((entry) {
-              return GestureDetector(
-                onTap: () => setState(() => _currentIndex = entry.key),
-                child: Container(
-                  width: 10.0,
-                  height: 10.0,
-                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentIndex == entry.key
-                        ? const Color(0xFFBE9369)
-                        : Colors.grey[400],
+              // Dấu chấm đè lên ảnh
+              Positioned(
+                bottom: 10, // cách đáy ảnh 10px
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: bannerImages.asMap().entries.map((entry) {
+                    return GestureDetector(
+                      onTap: () => setState(() => _currentIndex = entry.key),
+                      child: Container(
+                        width: 10.0,
+                        height: 10.0,
+                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentIndex == entry.key
+                              ? const Color(0xFFBE9369)
+                              // ignore: duplicate_ignore
+                              // ignore: deprecated_member_use
+                              : Colors.white.withOpacity(0.6),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Section: Best Seller
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  'Best Seller',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF023D50),
                   ),
                 ),
-              );
-            }).toList(),
+                Text(
+                  'Xem tất cả',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFFBE9369),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          SizedBox(
+            height: 220, // chiều cao của list
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categoryProducts[0]!.length,
+              itemBuilder: (context, index) {
+                final product = categoryProducts[0]![index];
+                return buildBestSellerCard(product);
+              },
+            ),
           ),
         ],
       ),
@@ -162,8 +215,91 @@ Widget buildGreetingHeader() {
             size: 26,
           ),
           onPressed: () {
-           //
+            //
           },
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildBestSellerCard(Map<String, dynamic> product) {
+  return Container(
+    width: 150,
+    margin: const EdgeInsets.only(left: 16),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 5,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Ảnh sản phẩm
+        ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+          child: Image.network(
+            product['imageUrl'],
+            height: 110,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                product['title'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF023D50),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Text(
+                    '${product['price']}đ',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFBE9369),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${product['oldPrice']}đ',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(
+                product['discount'],
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     ),
