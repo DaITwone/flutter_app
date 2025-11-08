@@ -1,7 +1,10 @@
-// ignore_for_file: use_super_parameters
+// ignore_for_file: use_super_parameters, deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import '../data/menu_data.dart';
+import 'cart_provider.dart';
+import 'cart_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({Key? key}) : super(key: key);
@@ -10,15 +13,15 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => _MenuPageState();
 }
 
-
 class _MenuPageState extends State<MenuPage> {
   int selectedTab = 0;
   bool isDelivery = true;
   int selectedCategory = 0;
+  String searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
 
   final List<String> tabs = [
     'Tất cả',
-    'Happy Hour',
     'Best Seller',
     'Món ngon phải thử',
   ];
@@ -33,6 +36,24 @@ class _MenuPageState extends State<MenuPage> {
     {'icon': FontAwesomeIcons.cookie, 'label': 'Topping'},
   ];
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // Hàm lọc sản phẩm theo từ khóa tìm kiếm
+  List<Map<String, dynamic>> _filterProducts(List<Map<String, dynamic>> products) {
+    if (searchQuery.isEmpty) {
+      return products;
+    }
+    
+    return products.where((product) {
+      final title = product['title'].toString().toLowerCase();
+      final query = searchQuery.toLowerCase();
+      return title.contains(query);
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,62 +105,71 @@ class _MenuPageState extends State<MenuPage> {
 
   Widget _buildProductList() {
     final products = categoryProducts[selectedCategory] ?? [];
+    final filteredProducts = _filterProducts(products);
 
-    if (products.isEmpty) {
+    if (filteredProducts.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32.0),
-          child: Text(
-            'Đang cập nhật...',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          child: Column(
+            children: [
+              Icon(
+                searchQuery.isNotEmpty ? Icons.search_off : Icons.inbox_outlined,
+                size: 80,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                searchQuery.isNotEmpty 
+                    ? 'Không tìm thấy sản phẩm nào\nphù hợp với "$searchQuery"'
+                    : 'Đang cập nhật...',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ],
           ),
         ),
       );
     }
 
-    // Hiển thị theo dạng promo cards cho ưu đãi, grid cho các category khác
-    if (selectedCategory == 0) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: products.map((product) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: _promoCard(
-                title: product['title'],
-                oldPrice: product['oldPrice'],
-                newPrice: product['price'],
-                discount: product['discount'],
-                imageUrl: product['imageUrl'],
-              ),
-            );
-          }).toList(),
-        ),
-      );
-    } else {
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-        ),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
+    // Hiển thị tất cả category theo dạng grid thống nhất
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+      ),
+      itemCount: filteredProducts.length,
+      itemBuilder: (context, index) {
+        final product = filteredProducts[index];
+        
+        // Kiểm tra xem có phải là ưu đãi không (có oldPrice và discount)
+        bool isPromo = product.containsKey('oldPrice') && 
+                       product.containsKey('discount');
+        
+        if (isPromo) {
+          return _productCardWithDiscount(
+            title: product['title'],
+            price: product['price'],
+            oldPrice: product['oldPrice'],
+            discount: product['discount'],
+            imageUrl: product['imageUrl'],
+          );
+        } else {
           return _productCard(
             title: product['title'],
             price: product['price'],
             imageUrl: product['imageUrl'],
           );
-        },
-      );
-    }
+        }
+      },
+    );
   }
 
+  // Card sản phẩm thường (không có khuyến mãi)
   Widget _productCard({
     required String title,
     required int price,
@@ -153,7 +183,6 @@ class _MenuPageState extends State<MenuPage> {
           arguments: {'title': title, 'imageUrl': imageUrl, 'price': price},
         );
       },
-
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -178,6 +207,10 @@ class _MenuPageState extends State<MenuPage> {
                   imageUrl,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.broken_image, size: 50),
+                  ),
                 ),
               ),
             ),
@@ -223,6 +256,135 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
+  // Card sản phẩm có khuyến mãi
+  Widget _productCardWithDiscount({
+    required String title,
+    required int price,
+    required int oldPrice,
+    required String discount,
+    required String imageUrl,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/detail',
+          arguments: {'title': title, 'imageUrl': imageUrl, 'price': price},
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.network(
+                      imageUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.broken_image, size: 50),
+                      ),
+                    ),
+                  ),
+                  // Badge giảm giá
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        discount,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${price.toStringAsFixed(0)}đ',
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            '${oldPrice.toStringAsFixed(0)}đ',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xFF003459),
+                        size: 24,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSidebar() {
     return Container(
       width: 70,
@@ -243,6 +405,9 @@ class _MenuPageState extends State<MenuPage> {
               onTap: () {
                 setState(() {
                   selectedCategory = i;
+                  // Clear search khi chuyển category
+                  searchQuery = '';
+                  _searchController.clear();
                 });
               },
             ),
@@ -292,9 +457,26 @@ class _MenuPageState extends State<MenuPage> {
         children: [
           Expanded(
             child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                });
+              },
               decoration: InputDecoration(
                 hintText: 'Katies muốn tìm gì?',
                 prefixIcon: const Icon(Icons.search),
+                suffixIcon: searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            searchQuery = '';
+                            _searchController.clear();
+                          });
+                        },
+                      )
+                    : null,
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 16,
@@ -391,105 +573,77 @@ class _MenuPageState extends State<MenuPage> {
     );
   }
 
-  Widget _promoCard({
-    required String title,
-    required int oldPrice,
-    required int newPrice,
-    required String discount,
-    required String imageUrl,
-    
-  }) {
-    return Container(
-      width: 160,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(imageUrl, height: 120, fit: BoxFit.cover),
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.brown[300],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    discount,
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
+  Widget _buildCartButton() {
+    return Consumer<CartProvider>(
+      builder: (context, cart, child) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartPage()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF003459),
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  children: [
+                    const Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                    if (cart.totalItems > 0)
+                      Positioned(
+                        right: -2,
+                        top: -2,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '${cart.totalItems}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  cart.totalAmount > 0 
+                      ? '${cart.totalAmount}đ'
+                      : '0đ',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '${newPrice.toStringAsFixed(0)}đ',
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+              ],
             ),
           ),
-          Text(
-            '${oldPrice.toStringAsFixed(0)}đ',
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-              decoration: TextDecoration.lineThrough,
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Icon(Icons.add_circle_outline, color: Color(0xFF003459)),
-        ],
-      ),
-    );
-  }
-
-  // Container - bao bọc, trang trí, định kích thước và bố trí con của nó.
-  Widget _buildCartButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      // Trang trí
-      decoration: BoxDecoration(
-        color: const Color(0xFF003459),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: const [
-          Icon(Icons.shopping_bag_outlined, color: Colors.white),
-          SizedBox(width: 8),
-          Text(
-            '0đ',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
