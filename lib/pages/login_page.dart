@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/main_layout.dart';
 import 'package:my_app/pages/home_page.dart';
 import 'package:my_app/services/auth_service.dart';
 
@@ -97,7 +98,8 @@ class _LoginPageState extends State<LoginPage> {
                 }
                 if (mounted) {
                   _showMessage(
-                      'Link đặt lại mật khẩu đã được gửi đến email của bạn');
+                    'Link đặt lại mật khẩu đã được gửi đến email của bạn',
+                  );
                 }
               } catch (e) {
                 if (mounted) {
@@ -144,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.user != null) {
         _showMessage(
-            'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.');
+          'Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.',
+        );
         // Chuyển về tab đăng nhập
         setState(() {
           isLogin = true;
@@ -190,9 +193,11 @@ class _LoginPageState extends State<LoginPage> {
         _showMessage('Đăng nhập thành công!');
         // Chuyển sang màn hình chính
         if (mounted) {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(
+              builder: (context) => const MainLayout(child: HomePage()),
+            ),
           );
         }
       }
@@ -359,8 +364,10 @@ class _LoginPageState extends State<LoginPage> {
                       hintStyle: TextStyle(color: Colors.white54),
                       filled: true,
                       fillColor: Colors.white10,
-                      prefixIcon:
-                          Icon(Icons.lock_outline, color: Colors.white54),
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Colors.white54,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                         borderSide: BorderSide.none,
@@ -388,8 +395,8 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: isLoading
                         ? null
                         : (isFormValid
-                            ? (isLogin ? _handleSignIn : _handleSignUp)
-                            : null),
+                              ? (isLogin ? _handleSignIn : _handleSignUp)
+                              : null),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(225, 207, 171, 92),
                       disabledBackgroundColor: Colors.white24,
@@ -404,8 +411,9 @@ class _LoginPageState extends State<LoginPage> {
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           )
                         : Text(

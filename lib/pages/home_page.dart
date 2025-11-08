@@ -1,9 +1,10 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:my_app/main_layout.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_app/pages/login_page.dart';
+import 'package:my_app/pages/user_page.dart';
 import '../data/menu_data.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadUserData();
-    
+
     // Lắng nghe thay đổi auth state
     _supabase.auth.onAuthStateChange.listen((data) {
       final session = data.session;
@@ -52,11 +53,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadUserData() async {
     final user = _supabase.auth.currentUser;
-    
+
     if (user != null) {
       setState(() {
         isLoggedIn = true;
-        
+
         // Lấy tên từ user metadata hoặc email
         if (user.userMetadata?['full_name'] != null) {
           userName = user.userMetadata!['full_name'];
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
           // Nếu không có tên, lấy phần trước @ của email
           userName = user.email?.split('@')[0] ?? 'Người dùng';
         }
-        
+
         // Tạo avatar từ chữ cái đầu của tên
         userAvatar = _getInitials(userName);
       });
@@ -76,11 +77,11 @@ class _HomePageState extends State<HomePage> {
   String _getInitials(String name) {
     List<String> nameParts = name.trim().split(' ');
     if (nameParts.isEmpty) return 'KAT';
-    
+
     if (nameParts.length == 1) {
       return nameParts[0].substring(0, 1).toUpperCase();
     } else {
-      return (nameParts[0].substring(0, 1) + 
+      return (nameParts[0].substring(0, 1) +
               nameParts[nameParts.length - 1].substring(0, 1))
           .toUpperCase();
     }
@@ -97,6 +98,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _navigateToUserPage() {
+    if (isLoggedIn) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainLayout(child: UserPage()),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainLayout(child: LoginPage()),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +124,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 16),
           _buildGreetingHeader(),
           const SizedBox(height: 16),
-          
+
           // Nút Login/Logout
           if (!isLoggedIn)
             Padding(
@@ -132,7 +151,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
           const SizedBox(height: 16),
-          
+
           // Banner
           Stack(
             alignment: Alignment.bottomCenter,
@@ -186,9 +205,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Section: Best Seller
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -239,48 +258,51 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              // Avatar tròn
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: const Color(0xFFBE9369).withOpacity(0.2),
-                child: Text(
-                  userAvatar,
-                  style: const TextStyle(
-                    color: Color(0xFF023D50),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+          GestureDetector(
+            onTap: _navigateToUserPage,
+            child: Row(
+              children: [
+                // Avatar tròn
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: const Color(0xFFBE9369).withOpacity(0.2),
+                  child: Text(
+                    userAvatar,
+                    style: const TextStyle(
+                      color: Color(0xFF023D50),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
+                const SizedBox(width: 10),
 
-              // Cột chứa lời chào và tên
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _getGreeting(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFBE9369),
-                      fontSize: 13,
-                      letterSpacing: 0.5,
+                // Cột chứa lời chào và tên
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _getGreeting(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFBE9369),
+                        fontSize: 13,
+                        letterSpacing: 0.5,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF023D50),
+                    const SizedBox(height: 2),
+                    Text(
+                      userName,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF023D50),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
 
           // Icon chuông bên phải
@@ -291,7 +313,7 @@ class _HomePageState extends State<HomePage> {
               size: 26,
             ),
             onPressed: () {
-              // 
+              //
             },
           ),
         ],
@@ -332,7 +354,9 @@ class _HomePageState extends State<HomePage> {
           children: [
             // Ảnh sản phẩm
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(10),
+              ),
               child: Image.network(
                 product['imageUrl'],
                 height: 110,

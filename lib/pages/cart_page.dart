@@ -1,6 +1,6 @@
 // ignore_for_file: use_super_parameters, deprecated_member_use
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/cart_provider.dart';
+import 'package:my_app/providers/cart_provider.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {

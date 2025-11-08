@@ -1,8 +1,13 @@
+// auth_service.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:my_app/supabase_config.dart';
 
+// Đăng nhập, đăng ký, đăng xuất, reset password
 class AuthService {
   final SupabaseClient _supabase = SupabaseConfig.client;
+  // SupabaseConfig.client là client đã được khởi tạo sẵn trong supabase_config.dart.
+
+
 
   // Đăng ký với email
   Future<AuthResponse> signUpWithEmail({

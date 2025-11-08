@@ -1,7 +1,7 @@
 // ignore_for_file: use_super_parameters, unnecessary_brace_in_string_interps, deprecated_member_use, unnecessary_to_list_in_spreads
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'cart_provider.dart';
+import '../providers/cart_provider.dart';
 import 'cart_page.dart';
 
 class DetailPage extends StatefulWidget {

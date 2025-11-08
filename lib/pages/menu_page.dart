@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../data/menu_data.dart';
-import 'cart_provider.dart';
+import '../providers/cart_provider.dart';
 import 'cart_page.dart';
 
 class MenuPage extends StatefulWidget {
