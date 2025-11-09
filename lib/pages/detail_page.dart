@@ -311,6 +311,7 @@ class _DetailPageState extends State<DetailPage> {
 
             // Nút thêm vào giỏ hàng
             SizedBox(
+              // button chiếm toàn bộ chiều rộng của parent
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () => addToCart(context, title, imageUrl, price, totalPrice),
@@ -328,6 +329,7 @@ class _DetailPageState extends State<DetailPage> {
                     fontWeight: FontWeight.bold,
                   ),
                   shadowColor: Colors.black45,
+                  // đổ bóng
                   elevation: 5,
                 ),
               ),
@@ -365,6 +367,7 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
+  // widget để tạo button chọn size (S, M, L) với hiệu ứng thay đổi màu khi được chọn.
   Widget _buildSizeOption(String size, String label) {
     final bool isSelected = selectedSize == size;
     return GestureDetector(

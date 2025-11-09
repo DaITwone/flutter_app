@@ -1,3 +1,6 @@
+// Constructor: là một phương thức đặc biệt trong một class được gọi ngay lập tức khi bạn tạo ra một đối tượng (instance) mới của class đó.
+// Khởi tạo Trạng thái: Gán giá trị ban đầu cho các thuộc tính (fields) của đối tượng.
+// Thiết lập Bắt buộc: Đảm bảo đối tượng được tạo ra ở trạng thái hợp lệ, bằng cách yêu cầu các dữ liệu cần thiết.
 class CartItem {
   final String id;
   final String title;
@@ -16,7 +19,7 @@ class CartItem {
     required this.size,
     required this.toppings,
     required this.totalPrice,
-    this.quantity = 1,
+    this.quantity = 1, // Mặc định sl = 1
   });
 
   // Tạo ID duy nhất dựa trên sản phẩm, size và topping
@@ -29,6 +32,7 @@ class CartItem {
   int get itemTotal => totalPrice * quantity;
 
   // Copy with
+  // Vì các thuộc tính dùng final, không thể thay đổi trực tiếp
   CartItem copyWith({
     String? id,
     String? title,

@@ -258,6 +258,7 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Phát hiện, xử lý mọi loại cử chỉ, biến các widget tĩnh thành các thành phần tương tác
           GestureDetector(
             onTap: _navigateToUserPage,
             child: Row(
@@ -370,6 +371,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
+            // Tạo khoảng trống (đệm) giữa nội dung (widget con) của nó và các cạnh (biên) của chính nó.
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(

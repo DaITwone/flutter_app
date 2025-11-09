@@ -37,11 +37,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Validate email
+  // RegExp: tạo biểu thức chính quy regular Expression mô tả mẫu ký tự
+  // hasMatch: kiểm tra khớp với mẫu
   bool isValidEmail(String email) {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
   // Hiển thị thông báo
+  // _showMessage: hàm tiện ích (helper function)
+  // SnackBar: hộp nhỏ trượt lên từ dưới màn hình, chứa thông điệp
   void _showMessage(String message, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -51,8 +55,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+  
 
   // Hiển thị dialog reset password
+  // AlertDialog: widget dạng hộp thoại
+  // mainAxisSize: MainAxisSize.min giúp dialog không chiếm toàn bộ chiều cao màn hình, mà chỉ đủ chỗ cho nội dung.
   void _showResetPasswordDialog() {
     final TextEditingController resetEmailController = TextEditingController();
 
@@ -77,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         actions: [
           TextButton(
+            // Đóng dialog lại
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Hủy'),
           ),
@@ -230,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: primaryColor,
       body: SafeArea(
         child: Center(
+          // cho phép cuộn nội dung khi bàn phím bật lên hoặc trên màn hình nhỏ.
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
             child: Column(

@@ -59,6 +59,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      // SafeArea giúp nội dung của bạn luôn nằm trong "vùng an toàn" và không bị các yếu tố hệ thống can thiệp.
       body: SafeArea(
         child: Row(
           children: [

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/cart_item.dart';
 
+// ChangeNotifier là class từ Flutter cho phép thông báo (notify) cho UI khi có thay đổi
 class CartProvider extends ChangeNotifier {
   final Map<String, CartItem> _items = {};
 
@@ -60,6 +61,7 @@ class CartProvider extends ChangeNotifier {
         ),
       );
     }
+    // Khi gọi notifyListeners() → tất cả widget đang lắng nghe sẽ rebuild
     notifyListeners();
   }
 
@@ -68,8 +70,9 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Giảm số lượng 
   void decreaseQuantity(String id) {
-    if (!_items.containsKey(id)) return;
+    if (!_items.containsKey(id)) return; // Không tồn tại -> dừng
 
     if (_items[id]!.quantity > 1) {
       _items.update(
@@ -79,11 +82,13 @@ class CartProvider extends ChangeNotifier {
         ),
       );
     } else {
+      // quantity = 1 → xóa luôn
       _items.remove(id);
     }
     notifyListeners();
   }
 
+  // Tăng số lượng 
   void increaseQuantity(String id) {
     if (!_items.containsKey(id)) return;
 
@@ -96,6 +101,7 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Xóa toàn bộ giỏ hàng
   void clear() {
     _items.clear();
     notifyListeners();
